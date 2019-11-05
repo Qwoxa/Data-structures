@@ -1,0 +1,17 @@
+{
+  "name": "data-structures",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^24.0.21",
+    "jest": "^24.9.0",
+    "tsc": "^1.20150623.0"
+  }
+}
