@@ -8,6 +8,7 @@ export interface ILinkedList<E> {
   shift(): E | null;
   push(nodeValue: E): number;
   pop(): E | null;
+  remove(nodeValue: E): E | null;
 }
 
 class Node<E> implements INode<E> {
@@ -134,6 +135,58 @@ export class LinkedList<E> implements ILinkedList<E> {
     return data;
   }
 
+  /**
+   * Removes the last Node from a list
+   * @param nodeValue Node value of a node to delete
+   * @return The value of the deleted Node
+   */
+  public remove(nodeValue: E): E | null {
+    // If the head is null, there is nothing to remove
+    if (this.head === null) {
+      return null;
+    }
+
+    let current = this.head,
+      previous,
+      found;
+    
+    // Loop through the List, looking for a nodeValue
+    while(current !== null) {
+      // if value if found, break
+      if (current.data === nodeValue) {
+        found = current;
+        break;
+      }
+
+      // continue iterating
+      previous = current;
+      current = current.next;
+    }
+
+    // If the value is not found - return null
+    if (!found) {
+      return null;
+    }
+
+    // If the searched node is first, then  call shift()
+    if (found === this.head) {
+      return this.shift();
+    }
+
+    // If the searched node is last, then call pop()
+    if (found === this.tail) {
+      return this.pop();
+    }
+
+    // If the code is still running, then the node is in
+    // the middle. So the previous should be linked with
+    // current.next
+    previous.next = current.next;
+    this.currentSize--;
+
+    return current.data;
+  }
+
   get Tail() {
     return this.tail;
   }
@@ -144,14 +197,3 @@ export class LinkedList<E> implements ILinkedList<E> {
 }
 
 const list = new LinkedList<string>();
-
-list.push('Ann');
-list.push('Craig');
-
-
-console.log(list.pop());
-console.log(list.pop());
-
-
-console.log(list.Head)
-console.log(list.Tail)
