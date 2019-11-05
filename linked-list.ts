@@ -36,32 +36,42 @@ export class LinkedList<E> implements ILinkedList<E> {
    * @return New length of the list
    */
   public unshift(nodeValue: E): number {
+    // Create node and increment size here to be DRY
     const node: Node<E> = new Node(nodeValue);
     this.currentSize++;
 
+    // If the head is null, then set the tail to be
+    // the added node.
     if (this.head === null) this.tail = node;
+
+    // Set property next of the node that is being
+    // added to be the current head, then set
+    // head to be the node
     node.next = this.head;
     this.head = node;
+
     return this.currentSize;
   }
 
   /**
    * Method shift removes the first element from a list
-   * @return New length of the list
+   * @return The value of the deleted Node
    */
-  public shift(): number | void {
+  public shift(): E | void {
     // If the head is null, there is nothing to shift
     if (this.head === null) {
-      return undefined;
+      return null;
     }
 
-    // Assign the second Node to be the head
+    // Save the node. Assign the second Node to be the head
     // If the list consisted only from one node
     // then set the tail to be null
+    const deletedNode = this.head;
     this.head = this.head.next;
     if (this.head === null) this.tail = null;
+    this.currentSize--;
 
-    return --this.currentSize;
+    return deletedNode.data;
   }
 
   /**
@@ -83,18 +93,18 @@ export class LinkedList<E> implements ILinkedList<E> {
     }
     
     // Set the the current tail's next property to be linked
-    // to the node that is being added. And set the tail to
-    // be the node
+    // to the node that is being added. And set the tail
     this.tail.next = node;
     this.tail = node;
 
     return this.currentSize;
   }
+
+  /**
+   * Removes the last Node from a list
+   * @return The value of the deleted Node
+   */
+  // public pop(): E {
+    
+  // }
 }
-
-const list = new LinkedList();
-console.log(list.shift());
-
-list.push("nick");
-list.push('dyson')
-list
