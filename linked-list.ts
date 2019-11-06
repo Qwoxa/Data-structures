@@ -9,6 +9,7 @@ export interface ILinkedList<E> {
   push(nodeValue: E): number;
   pop(): E | null;
   remove(nodeValue: E): E | null;
+  contains(nodeValue: E): boolean;
 }
 
 class Node<E> implements INode<E> {
@@ -137,7 +138,7 @@ export class LinkedList<E> implements ILinkedList<E> {
 
   /**
    * Removes the last Node from a list
-   * @param nodeValue Node value of a node to delete
+   * @param nodeValue Node value of a node to delete (primitive)
    * @return The value of the deleted Node
    */
   public remove(nodeValue: E): E | null {
@@ -173,11 +174,6 @@ export class LinkedList<E> implements ILinkedList<E> {
       return this.shift();
     }
 
-    // If the searched node is last, then call pop()
-    if (found === this.tail) {
-      return this.pop();
-    }
-
     // If the code is still running, then the node is in
     // the middle. So the previous should be linked with
     // current.next
@@ -185,6 +181,42 @@ export class LinkedList<E> implements ILinkedList<E> {
     this.currentSize--;
 
     return current.data;
+  }
+
+  /**
+   * Checks if the node exists
+   * @param nodeValue Node value of a node to check (primitive)
+   * @return Boolean value
+   */
+  public contains(nodeValue: E): boolean {
+    let current = this.head;
+
+     // Loop through the List, looking for a nodeValue
+     while(current !== null) {
+      if (current.data === nodeValue) {
+        return true;
+      }
+      
+      current = current.next;
+    }
+
+    return false;
+  }
+
+  /**
+   * Gets the data from the head's node
+   * @return The value of the first element | null
+   */
+  public peekFirst(): E | null {
+    return this.head ? this.head.data : null;
+  }
+
+  /**
+   * Gets the data from the tails's node
+   * @return The value of the last element | null
+   */
+  public peekLast(): E | null {
+    return this.tail ? this.tail.data : null;
   }
 
   get Tail() {
@@ -195,5 +227,3 @@ export class LinkedList<E> implements ILinkedList<E> {
     return this.head;
   }
 }
-
-const list = new LinkedList<string>();
