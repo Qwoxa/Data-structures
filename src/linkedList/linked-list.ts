@@ -9,10 +9,11 @@ export interface ILinkedList<E> {
   shift(): E | null;
   push(nodeValue: E): number;
   pop(): E | null;
-  remove(nodeValue: E): E | null;
-  contains(nodeValue: E): boolean;
   peekFirst(): E | null;
   peekLast(): E | null;
+  peekNth(nth: number): E | null;
+  remove(nodeValue: E): E | null;
+  contains(nodeValue: E): boolean;
 }
 
 class Node<E> implements INode<E> {
