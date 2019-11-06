@@ -1,3 +1,5 @@
+// TODO SPLICE
+
 export interface INode<E> {
   next: INode<E> | null;
   data: E;

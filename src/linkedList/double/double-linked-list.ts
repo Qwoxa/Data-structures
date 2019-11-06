@@ -290,9 +290,3 @@ export class LinkedList<E> implements ILinkedList<E> {
     };
   }
 }
-
-const list = new LinkedList<string>();
-list.unshift('Nick');
-list.unshift('Nick1');
-
-console.log(list);
