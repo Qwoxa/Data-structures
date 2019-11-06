@@ -159,6 +159,17 @@ export class LinkedList<E> implements ILinkedList<E> {
       return null;
     }
 
+    // If the searched node is first, then  call shift()
+    if (nodeValue === this.head.data) {
+      return this.shift();
+    }
+
+
+    // If the searched node is last, then  call pop()
+    if (nodeValue === this.tail.data) {
+      return this.pop();
+    }
+
     let current = this.head,
       previous,
       found;
@@ -181,10 +192,6 @@ export class LinkedList<E> implements ILinkedList<E> {
       return null;
     }
 
-    // If the searched node is first, then  call shift()
-    if (found === this.head) {
-      return this.shift();
-    }
 
     // If the code is still running, then the node is in
     // the middle. So the previous should be linked with
