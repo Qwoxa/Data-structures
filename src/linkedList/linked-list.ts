@@ -236,7 +236,7 @@ export class LinkedList<E> implements ILinkedList<E> {
    * @return The value of the nth element | null
    */
   public peekNth(nth: number): E | null {
-    if (nth > this.currentSize) {
+    if (nth >= this.currentSize) {
       return null;
     }
 
