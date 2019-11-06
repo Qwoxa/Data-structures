@@ -4,12 +4,15 @@ export interface INode<E> {
 }
 
 export interface ILinkedList<E> {
+  readonly length: number;
   unshift(nodeValue: E): number;
   shift(): E | null;
   push(nodeValue: E): number;
   pop(): E | null;
   remove(nodeValue: E): E | null;
   contains(nodeValue: E): boolean;
+  peekFirst(): E | null;
+  peekLast(): E | null;
 }
 
 class Node<E> implements INode<E> {
@@ -30,6 +33,14 @@ export class LinkedList<E> implements ILinkedList<E> {
   constructor() {
     this.head = this.tail = null;
     this.currentSize = 0;
+  }
+
+  /**
+   * Gets the length of the current list
+   * @return List length
+   */
+  public get length(): number {
+    return this.currentSize;
   }
   
 
@@ -219,11 +230,21 @@ export class LinkedList<E> implements ILinkedList<E> {
     return this.tail ? this.tail.data : null;
   }
 
-  get Tail() {
-    return this.tail;
-  }
+  /**
+   * Gets the data from the nth node (starting from 0)
+   * @return The value of the nth element | null
+   */
+  public peekNth(nth: number): E | null {
+    if (nth > this.currentSize) {
+      return null;
+    }
 
-  get Head() {
-    return this.head;
+    let count = 0, current = this.head;
+    while (count !== nth) {
+      current = current.next;
+      count++;
+    }
+
+    return current.data;
   }
 }
