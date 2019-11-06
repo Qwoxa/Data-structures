@@ -1,22 +1,9 @@
-import { LinkedList, ILinkedList } from './linked-list';
-
-
-// export interface ILinkedList<E> {
-//   readonly length: number;
-//   unshift(nodeValue: E): number;
-//   shift(): E | null;
-//   push(nodeValue: E): number;
-//   pop(): E | null;
-//   remove(nodeValue: E): E | null;
-//   contains(nodeValue: E): boolean;
-//   peekFirst(): E | null;
-//   peekLast(): E | null;
-// }
+import { LinkedList } from './linked-list';
 
 describe('LinkedList', () => {
   let list;
   beforeEach(() => {
-    list = new LinkedList<string | number>();
+    list = new LinkedList<string>();
   });
 
   describe('unshift', () => {
@@ -174,6 +161,94 @@ describe('LinkedList', () => {
   });
 
   describe('peekNth', () => {
+    it('Should return null if nth is bigger or equal to the lenght', () => {
+      expect(list).toHaveLength(0);
+      expect(list.peekNth(0)).toBeNull();
+      expect(list.peekNth(22)).toBeNull();
+    });
 
+    it('Should peek the correct value', () => {
+      list.push('T0');
+      list.push('T1');
+      list.push('T2');
+      list.push('T3');
+
+      expect(list.peekNth(0)).toBe('T0');
+      expect(list.peekNth(1)).toBe('T1');
+      expect(list.peekNth(2)).toBe('T2');
+      expect(list.peekNth(3)).toBe('T3');
+    })
+  });
+
+  describe('remove', () => {
+    it('Should return null if the list is empty', () => {
+      expect(list.remove('')).toBeNull();
+    });
+
+    it('Should return null if the item does not exist', () => {
+      list.push('T0');
+      expect(list.remove('T1')).toBeNull();
+      expect(list.remove('T2')).toBeNull();
+    });
+
+    it('Should return nodeValue if removed', () => {
+      list.push('T0');
+      list.push('T1');
+
+      expect(list.remove('T0')).toBe('T0');
+      expect(list.remove('T1')).toBe('T1');
+    });
+
+    it('Changes the length of the list', () => {
+      list.push('T0');
+      list.push('T1');
+      expect(list).toHaveLength(2);
+
+      list.remove('T0');
+      expect(list).toHaveLength(1);
+
+      list.remove('T1');
+      expect(list).toHaveLength(0);
+    })
+
+    it('Should remove the items when they match', () => {
+      list.push('T0');
+      list.push('T1');
+      list.push('T2');
+      list.push('T3');
+      list.push('T4');
+
+      list.remove('T0');
+      list.remove('T2');
+      list.remove('T4');
+
+      // T1 and T3 should be left
+      expect(list).toHaveLength(2);
+      expect(list.peekFirst()).toBe('T1');
+      expect(list.peekLast()).toBe('T3');
+    });
+  });
+
+  describe('contains', () => {
+    it('Should return false if the list is empty', () => {
+      expect(list.contains('T0')).toBeFalsy();
+      expect(list.contains('T1')).toBeFalsy();
+    });
+    
+    it('Should return false if the item does is not found', () => {
+      list.push('T0');
+      list.push('T1');
+      
+      expect(list.contains('T3')).toBeFalsy();
+      expect(list.contains('T4')).toBeFalsy();
+    });
+
+    it('Should return true if the item is found', () => {
+      list.push('T0');
+      list.push('T1');
+      
+      expect(list.contains('T0')).toBeTruthy();
+      expect(list.contains('T1')).toBeTruthy();
+    });
   });
 });
