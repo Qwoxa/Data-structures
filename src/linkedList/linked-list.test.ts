@@ -251,4 +251,50 @@ describe('LinkedList', () => {
       expect(list.contains('T1')).toBeTruthy();
     });
   });
+
+  describe('iterator', () => {
+    it('Should not return done if the object is empty', () => {
+      const iterator = list[Symbol.iterator]();
+      expect(iterator.next()).toEqual({
+        done: true,
+        value: null
+      });
+    });
+
+    it('Should iterate with single node', () => {
+      list.push('T0');
+      const iterator = list[Symbol.iterator]();
+
+      expect(iterator.next()).toEqual({
+        done: false,
+        value: 'T0'
+      });
+
+      expect(iterator.next()).toEqual({
+        done: true,
+        value: null
+      });
+    });
+    
+    it('Should iterate with multiple nodes', () => {
+        list.push('T0');
+        list.push('T1');
+        const iterator = list[Symbol.iterator]();
+  
+        expect(iterator.next()).toEqual({
+          done: false,
+          value: 'T0'
+        });
+
+        expect(iterator.next()).toEqual({
+          done: false,
+          value: 'T1'
+        });
+  
+        expect(iterator.next()).toEqual({
+          done: true,
+          value: null
+        });
+      });
+  });
 });
