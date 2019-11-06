@@ -16,6 +16,11 @@ export interface ILinkedList<E> {
   contains(nodeValue: E): boolean;
 }
 
+export interface IteratorResult<T> {
+  done: boolean;
+  value: T;
+}
+
 class Node<E> implements INode<E> {
   public next: INode<E> | null;
   public data: E;
@@ -254,5 +259,27 @@ export class LinkedList<E> implements ILinkedList<E> {
     }
 
     return current.data;
+  }
+
+  /**
+   * Iterates all the nodes
+   */
+  [Symbol.iterator]() {
+    let current = this.head;
+
+    return {
+      next(): IteratorResult<E> {
+        
+        // If current is null, then the done is false and the value is null
+        const data = {
+          done: current === null,
+          value: current && current.data
+        };
+
+        // Current is equal to current if it's null
+        current = current && current.next;
+        return data;
+      }
+    };
   }
 }
