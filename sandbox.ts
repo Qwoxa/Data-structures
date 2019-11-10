@@ -1,9 +1,8 @@
 const hash = (key: string): number => {
-  const g = 31;
 
   let hash = Array.from(key)
     .map(char => char.charCodeAt(0))
-    .reduce((sum, cur) => g * sum + cur, 0);
+    .reduce((sum, cur) => sum + cur, 0);
 
   // make sure it is positive int
   hash = hash > 0 ? hash : ~hash;
@@ -13,4 +12,10 @@ const hash = (key: string): number => {
 
 console.log(hash('Nick'));
 
-console.log(~-5);
+const getType = arg => {
+  return {}.toString
+    .call(arg)
+    .slice(7, -1)
+    .toLowerCase();
+};
+
