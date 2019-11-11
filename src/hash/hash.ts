@@ -1,5 +1,8 @@
-export interface IHash<V> {
+import { LinkedList, IteratorResult } from "../linkedList/double/double-linked-list";
+import { HashElement } from "../hashes/hashTable";
 
+export interface IHash<V> {
+  add(key: string, value: V): number;
 }
 
 export interface IHashElement<V> {
@@ -9,11 +12,17 @@ export interface IHashElement<V> {
 
 class Hash<V> implements IHash<V> {
   private size: number;
-  private storage: Array<V>;
+  private numElements: number;
+  private store: Array<LinkedList<IHashElement<V>>>;
+  private maxLoadFactor: number;
 
   constructor(size: number = 31) {
     this.size = size;
-    this.storage = [];
+    this.store = Array(size)
+      .fill(null)
+      .map(b => new LinkedList());
+    this.numElements = 0;
+    this.maxLoadFactor = 0.75;
   }
 
   /**
@@ -38,14 +47,127 @@ class Hash<V> implements IHash<V> {
    * Load factor shows the coefficient of slots
    * which have values
    */
-  public loadFactor(): number {
-    return null; // etries / entries filled
+  private loadFactor(): number {
+    return this.numElements / this.size;
   }
 
-  public set(key: string): number {
-    return this.hash(key);
+  /**
+   * Adds key and value pair to the table
+   * @return Length after adding the pair
+   */
+  public add(key: string, value: V): number {
+    if (this.loadFactor() > this.maxLoadFactor) {
+      this.resize(this.size * 2);
+    }
+    
+    const index = this.hash(key);
+
+    // If the node exists, just change the value
+    for(let el of this.store[index]) {
+      if (el.key === key) {
+        el.value = value;
+        return this.numElements;
+      }
+    }
+    
+    const hashEl = new HashElement(key, value);
+    this.store[index].push(hashEl);
+    this.numElements++;
+
+    return this.numElements;
+  }
+
+  /**
+   * Removes element with the specifies key
+   * @return Value of the deleted element | null if not found
+   */
+  public remove(key: string): V | null {
+    const index = this.hash(key);
+    const list = this.store[index];
+
+    let itemToRemove;
+    for (let el of list) {
+      if (el.key === key) itemToRemove = el;
+    }
+
+    if (itemToRemove === undefined) {
+      return null;
+    }
+
+    const removedItem = list.remove(itemToRemove);
+    this.numElements--;
+    return removedItem.value;
+  }
+
+  /**
+   * Returns value for the specified key
+   * @return Value | null
+   */
+  public getValue(key: string): V | null {
+    const index = this.hash(key);
+    const list = this.store[index];
+
+    let foundValue = null;
+    for (let el of list) {
+      if (el.key === key) foundValue = el.value;
+    }
+
+    return foundValue;
+  }
+
+  /**
+   * Resizes the store
+   */
+  public resize(newSize: number): void {
+    this.size = newSize;
+
+    const newStore: Array<LinkedList<IHashElement<V>>> = Array(newSize)
+      .fill(null)
+      .map(b => new LinkedList());
+    
+    // iterate all buckets in the store
+    this.store.forEach(list => {
+      // extract all nodes if they exist
+      const nodes = [...list];
+      nodes.forEach(node => {
+        const newIndex = this.hash(node.key);
+        newStore[newIndex].push(node);
+      });
+    });
+
+    this.store = newStore;
+  }
+
+    /**
+   * Iterates all the elements
+   * Returns pairs [key, value]
+   */
+  [Symbol.iterator]() {
+    const elements = [];
+    let index = 0;
+
+    this.store.forEach(b => {
+      const nodes = [...b];
+      nodes.forEach(node => {
+        elements.push([node.key, node.value]);
+      });
+    });
+
+
+
+    return {
+      next(): IteratorResult<[string, V]> {
+        const done = index === elements.length;
+
+        const data = {
+          done: done,
+          value: elements[index]
+        };
+
+        // Increment index
+        index++;
+        return data;
+      }
+    };
   }
 }
-
-const hash = new Hash();
-console.log(hash.set('8'));
