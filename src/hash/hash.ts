@@ -1,5 +1,4 @@
 import { LinkedList, IteratorResult } from "../linkedList/double/double-linked-list";
-import { HashElement } from "../hashes/hashTable";
 
 export interface IHash<V> {
   add(key: string, value: V): number;
@@ -8,6 +7,16 @@ export interface IHash<V> {
 export interface IHashElement<V> {
   key: string;
   value: V;
+}
+
+class HashElement<V> implements IHashElement<V> {
+  public key: string;
+  public value: V;
+
+  constructor(key: string, value: V) {
+    this.key = key;
+    this.value = value;
+  }
 }
 
 class Hash<V> implements IHash<V> {
