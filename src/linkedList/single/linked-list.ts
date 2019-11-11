@@ -50,7 +50,6 @@ export class LinkedList<E> implements ILinkedList<E> {
   public get length(): number {
     return this.currentSize;
   }
-  
 
   /**
    * Adds one element to the beginning of a list
@@ -98,7 +97,7 @@ export class LinkedList<E> implements ILinkedList<E> {
   }
 
   /**
-   * Adds one element to the end of a list 
+   * Adds one element to the end of a list
    * @param nodeValue Value to be set
    * @return New length of the list
    */
@@ -114,7 +113,7 @@ export class LinkedList<E> implements ILinkedList<E> {
       this.head = this.tail = node;
       return this.currentSize;
     }
-    
+
     // Set the the current tail's next property to be linked
     // to the node that is being added. And set the tail
     this.tail.next = node;
@@ -141,8 +140,8 @@ export class LinkedList<E> implements ILinkedList<E> {
 
     // Get the one before the last node
     let beforeLast = this.head;
-    while(beforeLast.next !== this.tail) {
-      beforeLast = beforeLast.next
+    while (beforeLast.next !== this.tail) {
+      beforeLast = beforeLast.next;
     }
 
     // Extract data, set the next to be null
@@ -171,7 +170,6 @@ export class LinkedList<E> implements ILinkedList<E> {
       return this.shift();
     }
 
-
     // If the searched node is last, then  call pop()
     if (nodeValue === this.tail.data) {
       return this.pop();
@@ -180,9 +178,9 @@ export class LinkedList<E> implements ILinkedList<E> {
     let current = this.head,
       previous,
       found;
-    
+
     // Loop through the List, looking for a nodeValue
-    while(current !== null) {
+    while (current !== null) {
       // if value if found, break
       if (current.data === nodeValue) {
         found = current;
@@ -198,7 +196,6 @@ export class LinkedList<E> implements ILinkedList<E> {
     if (!found) {
       return null;
     }
-
 
     // If the code is still running, then the node is in
     // the middle. So the previous should be linked with
@@ -217,12 +214,12 @@ export class LinkedList<E> implements ILinkedList<E> {
   public contains(nodeValue: E): boolean {
     let current = this.head;
 
-     // Loop through the List, looking for a nodeValue
-     while(current !== null) {
+    // Loop through the List, looking for a nodeValue
+    while (current !== null) {
       if (current.data === nodeValue) {
         return true;
       }
-      
+
       current = current.next;
     }
 
@@ -254,7 +251,8 @@ export class LinkedList<E> implements ILinkedList<E> {
       return null;
     }
 
-    let count = 0, current = this.head;
+    let count = 0,
+      current = this.head;
     while (count !== nth) {
       current = current.next;
       count++;
@@ -271,7 +269,6 @@ export class LinkedList<E> implements ILinkedList<E> {
 
     return {
       next(): IteratorResult<E> {
-        
         // If current is null, then the done is false and the value is null
         const data = {
           done: current === null,
