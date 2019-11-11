@@ -1,7 +1,15 @@
-import { LinkedList, IteratorResult } from "../linkedList/double/double-linked-list";
+import {
+  LinkedList,
+  IteratorResult
+} from "../linkedList/double/double-linked-list";
 
 export interface IHash<V> {
+  tableSize: number;
+  length: number;
   add(key: string, value: V): number;
+  remove(key: string): V;
+  getValue(key: string): V;
+  resize(newSize: number): void;
 }
 
 export interface IHashElement<V> {
@@ -19,7 +27,7 @@ class HashElement<V> implements IHashElement<V> {
   }
 }
 
-class Hash<V> implements IHash<V> {
+export class Hash<V> implements IHash<V> {
   private size: number;
   private numElements: number;
   private store: Array<LinkedList<IHashElement<V>>>;
@@ -61,6 +69,20 @@ class Hash<V> implements IHash<V> {
   }
 
   /**
+   * Returns table size
+   */
+  get tableSize(): number {
+    return this.size;
+  }
+
+  /**
+   * Returns amount of elements
+   */
+  get length(): number {
+    return this.numElements;
+  }
+
+  /**
    * Adds key and value pair to the table
    * @return Length after adding the pair
    */
@@ -68,17 +90,17 @@ class Hash<V> implements IHash<V> {
     if (this.loadFactor() > this.maxLoadFactor) {
       this.resize(this.size * 2);
     }
-    
+
     const index = this.hash(key);
 
     // If the node exists, just change the value
-    for(let el of this.store[index]) {
+    for (let el of this.store[index]) {
       if (el.key === key) {
         el.value = value;
         return this.numElements;
       }
     }
-    
+
     const hashEl = new HashElement(key, value);
     this.store[index].push(hashEl);
     this.numElements++;
@@ -133,7 +155,7 @@ class Hash<V> implements IHash<V> {
     const newStore: Array<LinkedList<IHashElement<V>>> = Array(newSize)
       .fill(null)
       .map(b => new LinkedList());
-    
+
     // iterate all buckets in the store
     this.store.forEach(list => {
       // extract all nodes if they exist
@@ -147,7 +169,7 @@ class Hash<V> implements IHash<V> {
     this.store = newStore;
   }
 
-    /**
+  /**
    * Iterates all the elements
    * Returns pairs [key, value]
    */
@@ -161,8 +183,6 @@ class Hash<V> implements IHash<V> {
         elements.push([node.key, node.value]);
       });
     });
-
-
 
     return {
       next(): IteratorResult<[string, V]> {
